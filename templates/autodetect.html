@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fake News Detection</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        textarea, input[type="text"] { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; background-color: #4CAF50; color: white; border: none; }
+        .result { border: 1px solid #ccc; padding: 10px; margin: 10px 0; }
+        h3 { color: #4CAF50; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>🧠 Fake News Detection</h1>
+
+    <h2>🔎 Check Top News</h2>
+    {% for r in results %}
+        <div class="result">
+            <strong>{{ r.title }}</strong><br>
+            <em>{{ r.description }}</em><br>
+            ML Model: <b>{{ r.prediction }}</b> | GPT Check: <b>{{ r.gpt_verification }}</b>
+        </div>
+    {% endfor %}
+
+    <h2>🌐 Check a News URL</h2>
+    <form action="/check_url" method="POST">
+        <input type="text" name="url" placeholder="Enter news URL here">
+        <button type="submit">Check URL</button>
+    </form>
+    {% if url_result %}
+        <div class="result">
+            <strong>{{ url_title }}</strong><br>
+            Content: {{ url_content[:300] }}...<br>
+            ML Model: <b>{{ url_result }}</b> | GPT Check: <b>{{ gpt_url_result }}</b>
+        </div>
+    {% elif url_error %}
+        <div class="error">{{ url_error }}</div>
+    {% endif %}
+
+    <h2>✍️ Check a Custom Sentence</h2>
+    <form action="/check_sentence" method="POST">
+        <textarea name="sentence" rows="4" placeholder="Type your news content here..."></textarea>
+        <button type="submit">Check Sentence</button>
+    </form>
+    {% if sentence_result %}
+        <div class="result">
+            Content: {{ sentence_text }}<br>
+            ML Model: <b>{{ sentence_result }}</b> | GPT Check: <b>{{ gpt_sentence_result }}</b>
+        </div>
+    {% endif %}
+</body>
+</html>
+
